@@ -1,0 +1,5 @@
+{
+    "memLimit": 73400320,
+    "timeLimit": 10000000000,
+    "solution": "solution.cpp"
+}

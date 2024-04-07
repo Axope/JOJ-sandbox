@@ -1,0 +1,4 @@
+container/data/*
+container/output/*
+container/sandbox
+container/solution*

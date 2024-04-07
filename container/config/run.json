@@ -1,0 +1,10 @@
+{
+    "memLimit": 73400320,
+    "timeLimit": 40000000000,
+    "solution": "solution",
+    "testCases": [
+        "0",
+        "1",
+        "2"
+    ]
+}
