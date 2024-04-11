@@ -13,7 +13,7 @@ import (
 )
 
 type Config struct {
-	MemLimit  int      `json:"memLimit"`
+	MemLimit  int64    `json:"memLimit"`
 	TimeLimit int64    `json:"timeLimit"`
 	Solution  string   `json:"solution"`
 	TestCases []string `json:"testCases,omitempty"`
@@ -73,7 +73,6 @@ func compile(config Config) {
 
 	if err := cmd.Start(); err != nil {
 		panic(fmt.Sprintf("Failed to start process, err = %v", err))
-		return
 	}
 
 	waitCh := make(chan error)
@@ -128,7 +127,7 @@ func compare(v string) bool {
 	if len(s1) != len(s2) {
 		return false
 	}
-	for i, _ := range s1 {
+	for i := range s1 {
 		if s1[i] != s2[i] {
 			return false
 		}
@@ -147,7 +146,6 @@ func runCases(config Config) {
 
 		if err := cmd.Start(); err != nil {
 			panic(fmt.Sprintf("Failed to start process, err = %v", err))
-			return
 		}
 
 		waitCh := make(chan error)
@@ -158,8 +156,8 @@ func runCases(config Config) {
 		select {
 		case <-time.After(time.Duration(config.TimeLimit)):
 			fmt.Println("timeout")
-			kill(cmd.Process.Pid)
-			return
+			// kill(cmd.Process.Pid)
+			os.Exit(4)
 
 		case err := <-waitCh:
 			if err != nil {
