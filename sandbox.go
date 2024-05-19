@@ -5,8 +5,10 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
+	"strconv"
 	"strings"
 	"syscall"
 	"time"
@@ -135,8 +137,29 @@ func compare(v string) bool {
 	return true
 }
 
+func getExecuteTime(v string) (int64, error) {
+	file, err := os.Open(fmt.Sprintf("./output/real_runtime_%s", v))
+	if err != nil {
+		return -1, err
+	}
+	defer file.Close()
+
+	content, err := io.ReadAll(file)
+	if err != nil {
+		return -1, err
+	}
+	strContent := strings.TrimSpace(string(content))
+	value, err := strconv.ParseInt(strContent, 10, 64)
+	if err != nil {
+		return -1, err
+	}
+	return value, nil
+}
+
 func runCases(config Config) {
 	testCases := config.TestCases
+
+	var executeTime int64
 
 	for _, v := range testCases {
 		cmd := exec.Command("/bin/bash", "-c",
@@ -169,11 +192,19 @@ func runCases(config Config) {
 
 		if compare(v) {
 			fmt.Printf("%v ok\n", v)
+
+			t, err := getExecuteTime(v)
+			if err != nil {
+				os.Exit(1)
+			}
+			executeTime = max(executeTime, t)
 		} else {
 			fmt.Printf("%v wrong answer\n", v)
 			os.Exit(2)
 		}
 	}
+
+	os.WriteFile("./output/executeTime", []byte(strconv.FormatInt(executeTime, 10)), 0644)
 }
 
 func main() {
