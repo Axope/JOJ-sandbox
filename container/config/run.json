@@ -1,10 +1,1 @@
-{
-    "memLimit": 73400320,
-    "timeLimit": 40000000000,
-    "solution": "solution",
-    "testCases": [
-        "0",
-        "1",
-        "2"
-    ]
-}
+{"memLimit":536870912,"solution":"solution","testCases":["1","2","3","4","5","6","7","8","9","10"],"timeLimit":1000000000}
