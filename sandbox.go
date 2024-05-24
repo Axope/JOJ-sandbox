@@ -19,6 +19,7 @@ type Config struct {
 	TimeLimit int64    `json:"timeLimit"`
 	Solution  string   `json:"solution"`
 	TestCases []string `json:"testCases,omitempty"`
+	Lang      int32    `json:"lang"`
 }
 
 const (
@@ -163,7 +164,7 @@ func runCases(config Config) {
 
 	for _, v := range testCases {
 		cmd := exec.Command("/bin/bash", "-c",
-			fmt.Sprintf("sh ./script/run.sh %d %s %s", config.MemLimit, config.Solution, v))
+			fmt.Sprintf("sh ./script/run.sh %d %s %s %d", config.MemLimit, config.Solution, v, config.Lang))
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 
